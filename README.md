@@ -14,6 +14,10 @@
 
 - **Liveness Probe:** `docker-emulator-android` includes a liveness probe mechanism, ensuring reliable and automatic detection of the container and emulator's state.
 
+## Current android tools
+
+**commandlinetools linux** - `10406996`
+
 ## Building
 
 To build the project, follow these steps:
