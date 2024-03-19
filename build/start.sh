@@ -57,8 +57,8 @@ sleep 2
 echo "Rebooting emulator after shell manipulation."
 adb reboot
 adb wait-for-device
-adb shell setprop debug.emulator.pod $HOSTNAME
-adb shell setprop debug.emulator.node $NODE_NAME
+#adb shell setprop debug.emulator.pod $HOSTNAME
+#adb shell setprop debug.emulator.node $NODE_NAME
 adb shell setprop debug.emulator.type $EMULATOR_TYPE
 
 
