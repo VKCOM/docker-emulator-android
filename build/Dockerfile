@@ -16,7 +16,7 @@ ARG IMAGE_TYPE=google_apis
 ENV EMULATOR_TYPE ${IMAGE_TYPE}
 
 # Install required dependencies
-RUN --mount=type=secret,id=mysecret,dst=/etc/apt/auth.conf.d/artifactory.conf apt-get update --allow-releaseinfo-change && apt-get -y dist-upgrade && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get -y dist-upgrade && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     telnet openjdk-17-jdk bash git unzip wget redir qemu-utils procps iproute2 \
     libx11-dev libpulse-dev libnss3 libxcomposite-dev libxcursor-dev libxi-dev \
     libxtst-dev uuid-dev libgl-dev libasound-dev libxcb1-dev lldb strace && \
