@@ -2,22 +2,19 @@
 
 set -ex -o pipefail
 
-LANG=en_US.UTF-8
-LANGUAGE=en_US:en
-LC_ALL=en_US.UTF-8
-ANDROID_HOME=/opt/sdk
 EMULATOR_ROOT="${ANDROID_HOME}/emulator"
 PATH="$PATH:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/emulator"
+EMULATOR_OPTS="-screen multi-touch -no-boot-anim -verbose -qt-hide-window -skip-adb-auth -writable-system -debug-init -logcat '*:v'"
 
 # Export library paths
-export ANDROID_SDK_ROOT=${ANDROID_HOME}
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${EMULATOR_ROOT}/lib64/qt/lib:${EMULATOR_ROOT}/lib64/libstdc++:${EMULATOR_ROOT}/lib64:${EMULATOR_ROOT}/lib64/gles_swiftshader
 export LIBGL_DEBUG=verbose
 
+
 # Start the emulator
-${EMULATOR_ROOT}/qemu/linux-x86_64/qemu-system-x86_64-headless \
+${EMULATOR_ROOT}/emulator \
   -avd x86_64 \
-  -gpu auto \
+  -gpu swiftshader_indirect \
   -no-window \
   -timezone Europe/Moscow \
   -ports ${CONSOLE_PORT},${ADB_PORT} \
@@ -53,11 +50,16 @@ settings put system pointer_location 1 &&
 settings put system show_touches 1 &&
 echo "chrome --disable-fre --no-default-browser-check --no-first-run" > /data/local/tmp/chrome-command-line &&
 am set-debug-app —persistent com.android.chrome'
-adb logcat -G 16M
 sleep 2
+#adb install /opt/apks/com.google.android.tts.apk
+#adb install /opt/apks/Google.apk
+#adb install /opt/apks/GMaps.apk
 echo "Rebooting emulator after shell manipulation."
 adb reboot
 adb wait-for-device
+adb shell setprop debug.emulator.pod $HOSTNAME
+adb shell setprop debug.emulator.node $NODE_NAME
+adb shell setprop debug.emulator.type $EMULATOR_TYPE
 
 
 ip=$(ip addr list eth0|grep "inet "|cut -d' ' -f6|cut -d/ -f1)
@@ -66,5 +68,6 @@ redir --laddr=$ip --lport=9999 --caddr=127.0.0.1 --cport=5037 &
 redir --laddr=$ip --lport=${CONSOLE_PORT} --caddr=127.0.0.1 --cport=${CONSOLE_PORT} &
 redir --laddr=$ip --lport=${ADB_PORT} --caddr=127.0.0.1 --cport=${ADB_PORT} &
 
-wait ${EMULATOR_PID}
 echo "Emulator preparation finished"
+wait ${EMULATOR_PID}
+python3 /opt/crashlytics.py
