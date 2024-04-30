@@ -22,8 +22,22 @@
 
 To build the project, follow these steps:
 
+Clone the project
+
 ```console
-$ docker build -t emulator-30 .
+git clone https://github.com/VKCOM/docker-emulator-android.git
+```
+
+Go to the project directory
+
+```console
+cd docker-emulator-android/build/
+```
+
+Make an image build
+
+```console
+docker build -t docker-emulator-android-30 .
 ```
 
 ## Usage
@@ -31,7 +45,7 @@ $ docker build -t emulator-30 .
 To illustrate, here's how to run the default emulator settings with Android API 30:
 
 ```console
-$ docker run --rm --privileged -e ANDROID_ARCH="x86" -v /dev/kvm:/dev/kvm docker-emulator-android-30:1
+docker run --rm --privileged -e ANDROID_ARCH="x86" -v /dev/kvm:/dev/kvm docker-emulator-android-30:1
 ```
 
 For a comprehensive list of available options, please refer to the [official documentation](https://developer.android.com/studio/run/emulator-commandline.html).
