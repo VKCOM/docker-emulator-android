@@ -16,7 +16,7 @@
 
 ## Current android tools
 
-**commandlinetools linux** - `10406996`
+**commandlinetools linux** - `11076708`
 
 ## Building
 
